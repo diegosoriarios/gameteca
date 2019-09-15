@@ -1,7 +1,18 @@
-from flask import Flask, render_template, request, redirect, session, flash, url_for
+from flask import Flask, render_template, request, redirect, session, flash, url_for, jsonify
+from flask_sqlalchemy import SQLAlchemy
+
+import os
 
 app = Flask(__name__)
 app.secret_key = 'diego'
+
+app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_DATABASE_URL'] = 'postgresql://postgres:postgres@localhost/redesII'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+#from models import Games
+from models.Games import Games
 
 class Jogo:
     def __init__(self, nome, categoria, console):
@@ -29,7 +40,15 @@ lista = [jogo1, jogo2, jogo3]
 
 @app.route('/')
 def index():
-    return render_template('lista.html', titulo='Jogos', jogos=lista)
+    try:
+        jogos = Games.query.all()
+        for jogo in jogos:
+            print(jogo)
+        to_return = jsonify([e.serialize() for e in jogos])
+        return render_template('lista.html', titulo='Jogos', jogos=to_return)
+    except Exception as e:
+	    return(str(e))
+    #return render_template('lista.html', titulo='Jogos', jogos=lista)
 
 @app.route('/novo')
 def novo():
@@ -42,9 +61,23 @@ def create():
     nome = request.form['nome']
     categoria = request.form['categoria']
     console = request.form['console']
-    jogo = Jogo(nome, categoria, console)
-    lista.append(jogo)
-    return redirect(url_for('index'))
+
+    try:
+        jogo = Games(
+            name=name,
+            categoria=categoria,
+            console=console
+        )
+        db.session.add(jogo)
+        db.session.commit()
+
+        return redirect(url_for('index'))
+    except Exception as e:
+        return(str(e)) 
+
+    #jogo = Jogo(nome, categoria, console)
+    #lista.append(jogo)
+    #return redirect(url_for('index'))
 
 
 @app.route('/login')
