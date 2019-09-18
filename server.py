@@ -5,14 +5,11 @@ import os
 
 app = Flask(__name__)
 app.secret_key = 'diego'
-
 app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_DATABASE_URL'] = 'postgresql://postgres:postgres@localhost/redesII'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-#from models import Games
-from models.Games import Games
+from models import Products
 
 class Jogo:
     def __init__(self, nome, categoria, console):
@@ -33,52 +30,42 @@ usuario2 = Usuario('eu', 'Eu', '1234')
 usuarios = {usuario1.id: usuario1,
             usuario2.id: usuario2}
 
-jogo1 = Jogo('Super Mario', 'Plataforma', 'SNES')
-jogo2 = Jogo('Pokemon Gold', 'RPG', 'GBA')
-jogo3 = Jogo('Mortal Kombat', 'Ação', 'PS2')
-lista = [jogo1, jogo2, jogo3]
-
+#Index
 @app.route('/')
 def index():
+    products = None
     try:
-        jogos = Games.query.all()
-        for jogo in jogos:
-            print(jogo)
-        to_return = jsonify([e.serialize() for e in jogos])
-        return render_template('lista.html', titulo='Jogos', jogos=to_return)
+        products = Products.query.all()
+        if products == None:
+           print("vazio")
+        return render_template('lista.html', titulo='Products', products=products)
     except Exception as e:
 	    return(str(e))
-    #return render_template('lista.html', titulo='Jogos', jogos=lista)
+    return render_template('lista.html', titulo='Products', products=products)
 
+#Novo Usuário
 @app.route('/novo')
 def novo():
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
         return redirect(url_for('login', proxima=url_for('novo')))
     return render_template('novo.html', titulo='Novo Jogo')
 
-@app.route('/criar', methods=['POST',])
+#Criar post
+@app.route('/criar', methods=['POST'])
 def create():
-    nome = request.form['nome']
-    categoria = request.form['categoria']
-    console = request.form['console']
+    imagem = request.form['imagem']
+    descricao = request.form['descricao']
+    valor = request.form['valor']
 
     try:
-        jogo = Games(
-            name=name,
-            categoria=categoria,
-            console=console
-        )
-        db.session.add(jogo)
+        p = Products(imagem, descricao, valor)
+        db.session.add(p)
         db.session.commit()
 
         return redirect(url_for('index'))
+
     except Exception as e:
         return(str(e)) 
-
-    #jogo = Jogo(nome, categoria, console)
-    #lista.append(jogo)
-    #return redirect(url_for('index'))
-
 
 @app.route('/login')
 def login():
