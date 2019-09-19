@@ -9,26 +9,7 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-from models import Products
-
-class Jogo:
-    def __init__(self, nome, categoria, console):
-        self.nome = nome
-        self.categoria = categoria
-        self.console = console
-
-class Usuario:
-    def __init__(self, id, nome, senha):
-        self.id = id
-        self.nome = nome
-        self.senha = senha
-
-
-usuario1 = Usuario('diego', 'Diego', '123456')
-usuario2 = Usuario('eu', 'Eu', '1234')
-
-usuarios = {usuario1.id: usuario1,
-            usuario2.id: usuario2}
+from models import Products, Usuarios
 
 #Index
 @app.route('/')
@@ -67,24 +48,33 @@ def create():
     except Exception as e:
         return(str(e)) 
 
+#Tela de login
 @app.route('/login')
 def login():
     proxima = request.args.get('proxima')
     return render_template('login.html', proxima=proxima)
 
+#Checa autenticação
 @app.route('/autenticar', methods=['POST'])
 def autenticar():
-    if request.form['usuario'] in usuarios:
-        usuario = usuarios[request.form['usuario']]
-        if usuario.senha == request.form['senha']:
-            session['usuario_logado'] = usuario.id
-            flash(usuario.nome + ' logou com sucesso!')
-            proxima_pagina = request.form['proxima']
-            return redirect(proxima_pagina)
-    else:
-        flash('Senha não está correta!')
-        return redirect(url_for('login'))
 
+    usuarios = Usuarios.query.all()
+
+    #Procura usuários, se tiver cadastrado loga
+    for usuario in usuarios:
+        if request.form['usuario'] == usuario.name:
+            if request.form['senha'] == usuario.senha:
+                session['usuario_logado'] = usuario.name
+                flash(usuario.name + ' logou com sucesso!')
+                proxima_pagina = request.form['proxima']
+                return redirect(proxima_pagina)
+
+
+    #senão mostra mensagem de erro
+    flash('Senha não está correta!')
+    return redirect(url_for('login'))
+
+#Logout
 @app.route('/logout')
 def logout():
     session['usuario_logado'] = None

@@ -7,10 +7,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}">
   </head>
   <body>
-    <div class="container">
-        <div class="menu">
-          <a href="novo">Novo</a>
-        </div>
 
         {% with messages = get_flashed_messages() %}
           {% if messages %} 

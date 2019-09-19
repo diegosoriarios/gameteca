@@ -5,12 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Jogoteca</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </head>
   <body>
-    <div class="container">
-        <div class="menu">
-          <a href="novo">Novo</a>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">NOME</a>
         </div>
+        
+        <ul class="nav navbar-nav navbar-right">
+          {% if session['usuario_logado'] != None %}
+            <li><a href="novo">Novo</a></li>
+            <li href="#" class="dropdown-toggle text-capitalize" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><a href="#" >{{  session['usuario_logado'] }}</a> </li>
+            <ul class="dropdown-menu">
+                <li><a href="logout">Logout</a></li>
+            </ul>  
+          {% else %}
+            <li><a href="login">Login</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
 
         {% with messages = get_flashed_messages() %}
           {% if messages %} 
