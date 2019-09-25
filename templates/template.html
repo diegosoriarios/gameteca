@@ -4,30 +4,144 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Jogoteca</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/contato.css') }}" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fixed.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/social.css') }}" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <!--
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	-->
   </head>
   <body>
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">NOME</a>
+    <!--- Start Navbar Section -->
+	<div class="container-fluid">
+		<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+			<a class="navbar-brand" href="/"><img src="static/img/logo.svg"></a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item ">
+						<a class="nav-link" href="produtos">Produtos</a>
+					</li>
+					<li class="nav-item ">
+						<a class="nav-link" href="acessorios">Acessórios</a>
+					</li>
+					<li class="nav-item ">
+						<a class="nav-link" href="empresa">Empresa</a>
+					</li>
+					<li class="nav-item ">
+						<a class="nav-link" href="contato">Contato</a>
+					</li>
+					<li class="nav-item">
+							<a href="login" class="nav-link"> Login</a>
+						</li>
+				</ul>
+			</div>
+
+		</nav>
+	</div>
+	<!--- End Navbar Section -->
+
+	<div class="video-background">
+		<div class="video-wrap">
+			<div id="video">
+				<img src="static/img/masinha.jpg" class="vo-da-um-soco">
+			</div>
+		</div>
+	</div>
+
+	<div class="caption text-center">
+		<h1>Mesas de Bilhar</h1>
+		<h3>Beleza e diversão em um só lugar</h3>
+		<!--<a class="btn btn-outline-light btn-lg" href="#donate">DETALHES</a> -->
+	</div>
+
+	<!--- End Text Section -->
+
+	<div class="container-fluid offer pt-3 pb-3 bg-doido d-none d-md-block">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 m-right">
+					<h4>Peça seu orçamento</h4>
+					<p>EMAIL</p>
+				</div>
+				<div class="col-md-6">
+					<h4>Converse conosco</h4>
+					<p>(54) tatata</p>
+				</div>
+			</div>
+		</div>
+    </div>
+	
+	
+	<!-- CONTENT -->
+    <div class="container mt-5">
+        <div class="container pb-5 blog">
+            {% block conteudo %}{% endblock %}
         </div>
-        
-        <ul class="nav navbar-nav navbar-right">
-          {% if session['usuario_logado'] != None %}
-            <li><a href="novo">Novo</a></li>
-            <li href="#" class="dropdown-toggle text-capitalize" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><a href="#" >{{  session['usuario_logado'] }}</a> </li>
-            <ul class="dropdown-menu">
-                <li><a href="logout">Logout</a></li>
-            </ul>  
-          {% else %}
-            <li><a href="login">Login</a></li>
-          {% endif %}
-        </ul>
-      </div>
-    </nav>
+    </div>
+
+<!--- ---------------------------- FOOTER ------------------------------------- -->
+<footer class="page-footer font-small cyan bg-dark">
+
+		<!-- Footer Elements -->
+		<div class="container">
+
+			<!-- Grid row-->
+			<div class="row">
+
+				<!-- Grid column -->
+				<div class="col-md-6 py-5 text-center">
+					<div class="mb-auto text-center">
+
+						<!-- Facebook -->
+						<a class=" text-center">
+							<img src="static/img/facebook.png" class="social-icon   mr-4">
+						</a>
+						<!-- Whats -->
+						<a class="text-center">
+							<img src="static/img/whatsapp.png" class="social-icon   mr-4">
+						</a>
+
+						<!--Instagram-->
+						<a class="text-center">
+							<img src="static/img/instagram.png" class="social-icon  mr-4">
+						</a>
+					</div>
+				</div>
+				<div class="col-md-4 py-5">
+					<div class=" flex-center text-center text-light">
+						<a href="">
+								<img src="static/img/demi.png" class="social-icon  ">
+						</a><br>
+						© DEMI INC.
+					</div>
+				</div>
+				<!-- Grid column -->
+
+			</div>
+			<!-- Grid row-->
+
+		</div>
+		<!-- Footer Elements -->
+
+		<!-- Copyright -->
+		<hr />
+		<div class="footer-copyright text-center py-3 text-light">
+				Requinte Básico  
+		</div>
+		<!-- Copyright -->
+
+    </footer>
+    
+
     <div class="container">
 
         {% with messages = get_flashed_messages() %}
@@ -39,12 +153,18 @@
             </ul>
           {% endif %}
         {% endwith %}
+	
+    </div>
 
-        <div class="page-header">
-            <h1>{{ titulo }}</h1>
-        </div>
-
-        {% block conteudo %}{% endblock %}
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
+        integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+        crossorigin="anonymous"></script>
 
     </div>
   </body>

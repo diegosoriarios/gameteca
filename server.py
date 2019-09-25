@@ -19,10 +19,23 @@ def index():
         products = Products.query.all()
         if products == None:
            print("vazio")
-        return render_template('lista.html', titulo='Products', products=products)
+        return render_template('index.html', titulo='Products', products=products)
     except Exception as e:
 	    return(str(e))
-    return render_template('lista.html', titulo='Products', products=products)
+    return render_template('index.html', titulo='Products', products=products)
+
+#Produtos
+@app.route('/produtos')
+def produtos():
+    products = None
+    try:
+        products = Products.query.all()
+        if products == None:
+           print("vazio")
+        return render_template('produtos.html', titulo='Products', products=products)
+    except Exception as e:
+	    return(str(e))
+    return render_template('produtos.html', titulo='Products', products=products)
 
 #Novo Usuário
 @app.route('/novo')
@@ -30,6 +43,16 @@ def novo():
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
         return redirect(url_for('login', proxima=url_for('novo')))
     return render_template('novo.html', titulo='Novo Jogo')
+
+
+#Nova compra
+@app.route('/compra/<name>')
+def compra(product):
+    print(product)
+    print('\n AQUI \n')
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
+        return redirect(url_for('login', proxima=url_for('compra')))
+    return render_template('compra.html', titulo='Finalizar Compra')
 
 #Criar post
 @app.route('/criar', methods=['POST'])
@@ -54,6 +77,29 @@ def login():
     proxima = request.args.get('proxima')
     return render_template('login.html', proxima=proxima)
 
+#Tela Acessórios
+@app.route('/acessorios')
+def acessorios():
+    products = None
+    try:
+        products = Products.query.all()
+        if products == None:
+           print("vazio")
+        return render_template('acessorios.html', titulo='Products', products=products)
+    except Exception as e:
+	    return(str(e))
+    return render_template('acessorios.html', titulo='Products', products=products)
+
+@app.route('/empresa')
+def empresa():
+    proxima = request.args.get('proxima')
+    return render_template('empresa.html', proxima=proxima)
+
+@app.route('/contato')
+def contato():
+    proxima = request.args.get('proxima')
+    return render_template('contato.html', proxima=proxima)
+
 #Checa autenticação
 @app.route('/autenticar', methods=['POST'])
 def autenticar():
@@ -62,8 +108,8 @@ def autenticar():
 
     #Procura usuários, se tiver cadastrado loga
     for usuario in usuarios:
-        if request.form['usuario'] == usuario.name:
-            if request.form['senha'] == usuario.senha:
+        if request.form['email'] == usuario.name:
+            if request.form['password'] == usuario.senha:
                 session['usuario_logado'] = usuario.name
                 flash(usuario.name + ' logou com sucesso!')
                 proxima_pagina = request.form['proxima']
